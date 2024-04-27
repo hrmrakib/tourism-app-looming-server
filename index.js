@@ -11,7 +11,7 @@ app.use(cors());
 const dbUser = process.env.DB_USER;
 const dbPass = process.env.DB_PASS;
 
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const uri = `mongodb+srv://${dbUser}:${dbPass}@cluster0.dmwxvyo.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -36,6 +36,14 @@ async function run() {
     app.get("/allspot", async (req, res) => {
       const data = allSpot.find();
       const result = await data.toArray();
+      res.send(result);
+    });
+
+    app.get("/allspot/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+
+      const result = await allSpot.findOne(query);
       res.send(result);
     });
 
