@@ -32,6 +32,7 @@ async function run() {
 
     const tourismApp = client.db("tourismApp");
     const allSpot = tourismApp.collection("allSpot");
+    const countryData = tourismApp.collection("countryData");
 
     app.get("/allspot", async (req, res) => {
       const data = allSpot.find();
@@ -39,17 +40,40 @@ async function run() {
       res.send(result);
     });
 
+    app.post("/allspot", async (req, res) => {
+      const spotInfo = req.body;
+      const result = await allSpot.insertOne(spotInfo);
+      res.send(result);
+    });
+
     app.get("/allspot/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
-
       const result = await allSpot.findOne(query);
       res.send(result);
     });
 
-    app.post("/allspot", async (req, res) => {
-      const spotInfo = req.body;
-      const result = await allSpot.insertOne(spotInfo);
+    // get all data to specific country
+    app.get("/specificCountry/:name", async (req, res) => {
+      const query = { country: req.params.name };
+      const cursor = allSpot.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    // get all country data for home page
+    app.get("/countryData", async (req, res) => {
+      const cursor = countryData.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    // get data via userEmail
+    app.get("/allDataByEmail/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { userEmail: email };
+      const cursor = allSpot.find(query);
+      const result = await cursor.toArray();
       res.send(result);
     });
 
