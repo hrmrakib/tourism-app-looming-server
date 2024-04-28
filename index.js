@@ -77,6 +77,36 @@ async function run() {
       res.send(result);
     });
 
+    app.put("/allspot/:id", async (req, res) => {
+      const id = req.params.id;
+      const data = req.body;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updatedData = {
+        $set: {
+          averageCost: data.averageCost,
+          country: data.country,
+          description: data.description,
+          location: data.location,
+          photoURL: data.photoURL,
+          seasonality: data.seasonality,
+          spotName: data.spotName,
+          totaVisitorsPerYear: data.totaVisitorsPerYear,
+          travelTime: data.travelTime,
+        },
+      };
+
+      app.delete("/allspot/:id", async (req, res) => {
+        const id = req.params.id;
+        const query = { _id: new ObjectId(id) };
+        const result = await allSpot.deleteOne(query);
+        res.send(result);
+      });
+
+      const result = await allSpot.updateOne(filter, updatedData, options);
+      res.send(result);
+    });
+
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
