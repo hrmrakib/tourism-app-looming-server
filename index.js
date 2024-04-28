@@ -46,6 +46,14 @@ async function run() {
       res.send(result);
     });
 
+    app.delete("/allspot/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log(id);
+      const query = { _id: new ObjectId(id) };
+      const result = await allSpot.deleteOne(query);
+      res.send(result);
+    });
+
     app.get("/allspot/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
@@ -95,13 +103,6 @@ async function run() {
           travelTime: data.travelTime,
         },
       };
-
-      app.delete("/allspot/:id", async (req, res) => {
-        const id = req.params.id;
-        const query = { _id: new ObjectId(id) };
-        const result = await allSpot.deleteOne(query);
-        res.send(result);
-      });
 
       const result = await allSpot.updateOne(filter, updatedData, options);
       res.send(result);
