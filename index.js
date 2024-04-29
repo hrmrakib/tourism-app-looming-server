@@ -34,6 +34,10 @@ async function run() {
     const allSpot = tourismApp.collection("allSpot");
     const countryData = tourismApp.collection("countryData");
 
+    app.get("/", (req, res) => {
+      res.send("Tourism App is running.");
+    });
+
     app.get("/allspot", async (req, res) => {
       const data = allSpot.find();
       const result = await data.toArray();
