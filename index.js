@@ -52,7 +52,7 @@ async function run() {
 
     app.delete("/allspot/:id", async (req, res) => {
       const id = req.params.id;
-      console.log(id);
+
       const query = { _id: new ObjectId(id) };
       const result = await allSpot.deleteOne(query);
       res.send(result);
